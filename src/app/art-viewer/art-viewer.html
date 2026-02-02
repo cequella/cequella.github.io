@@ -2,23 +2,28 @@
     <div class="viewer-layout">
         <div class="side-panel black-block">
             <a routerLink="/" class="back-link">
-                &lsaquo; RETURN TO BASE
+                &lsaquo; {{ langService.lang() === 'pt' ? 'RETORNAR À BASE' : 'RETURN TO BASE' }}
             </a>
 
             <div class="info-content">
                 <div class="red-flag">PROGRAM ID: {{ sketchId().toUpperCase() }}</div>
-                <h1 class="art-title">{{ currentInfo().title }}</h1>
+
+                <h1 class="art-title">
+                    {{ currentTitle() }}
+                </h1>
                 <div class="divider"></div>
-                <p class="art-description">{{ currentInfo().desc }}</p>
+                <p class="art-description">
+                    {{ currentDescription() }}
+                </p>
 
                 <div class="system-stats">
                     <div class="stat-row">
                         <span>STATUS</span>
-                        <span class="active-dot">ACTIVE</span>
+                        <span class="active-dot">{{ langService.lang() === 'pt' ? 'ATIVO' : 'ACTIVE' }}</span>
                     </div>
                     <div class="stat-row">
                         <span>MODE</span>
-                        <span>GENERATIVE</span>
+                        <span>{{ langService.lang() === 'pt' ? 'GENERATIVO' : 'GENERATIVE' }}</span>
                     </div>
                 </div>
 

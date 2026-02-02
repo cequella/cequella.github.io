@@ -1,8 +1,9 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit, inject, ViewEncapsulation, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit, inject, ViewEncapsulation, signal, computed } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Sketch } from '../sketches/types';
+import { Sketch, SketchMetadata } from '../sketches/types';
 import { getSketchById } from '../sketches';
+import { LanguageService } from '../language.service';
 import hljs from 'highlight.js/lib/core';
 import typescript from 'highlight.js/lib/languages/typescript';
 
@@ -20,10 +21,24 @@ hljs.registerLanguage('typescript', typescript);
 export class ArtViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('canvas') canvasRef!: ElementRef<HTMLCanvasElement>;
   private http = inject(HttpClient);
+  public readonly langService = inject(LanguageService);
 
   currentSketch: Sketch | null = null;
   sketchId = signal<string>('');
-  currentInfo = signal({ title: '', desc: '' });
+
+  sketchMetadata = signal<SketchMetadata | null>(null);
+
+  currentTitle = computed(() => {
+    const meta = this.sketchMetadata();
+    const lang = this.langService.lang();
+    return meta ? meta.title[lang] : '';
+  });
+
+  currentDescription = computed(() => {
+    const meta = this.sketchMetadata();
+    const lang = this.langService.lang();
+    return meta ? meta.description[lang] : '';
+  });
 
   showingCode = signal(false);
   sourceCode = signal('');
@@ -39,6 +54,7 @@ export class ArtViewerComponent implements AfterViewInit, OnDestroy, OnInit {
         this.sourceCode.set('');
         this.highlightedCode.set('');
         this.showingCode.set(false);
+        this.sketchMetadata.set(null);
 
         if (this.canvasRef) {
           this.loadSketch();
@@ -55,6 +71,7 @@ export class ArtViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   loadSketch() {
+    // 1. Clean up existing sketch immediately
     if (this.currentSketch) {
       this.currentSketch.destroy();
       this.currentSketch = null;
@@ -63,20 +80,19 @@ export class ArtViewerComponent implements AfterViewInit, OnDestroy, OnInit {
     const sketch = getSketchById(this.sketchId());
     if (sketch) {
       this.currentSketch = sketch;
-      this.currentInfo.set({
-        title: sketch.metadata.title,
-        desc: sketch.metadata.description
-      });
+      this.sketchMetadata.set(sketch.metadata);
+
+      // Use a reference to the sketch we just created to avoid race conditions in timeout
+      const activeSketch = sketch;
 
       setTimeout(() => {
-        if (this.canvasRef) {
+        // Only proceed if this sketch is still the current one when the timeout fires
+        if (this.canvasRef && this.currentSketch === activeSketch) {
           const canvas = this.canvasRef.nativeElement;
           this.resizeCanvas();
-          sketch.setup(canvas);
+          activeSketch.setup(canvas);
         }
       }, 0);
-    } else {
-      this.currentInfo.set({ title: 'Unknown Sketch', desc: '' });
     }
   }
 
@@ -108,6 +124,7 @@ export class ArtViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   resizeCanvas() {
     if (!this.canvasRef) return;
     const canvas = this.canvasRef.nativeElement;
+    // Set internal dimensions to match screen size
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }

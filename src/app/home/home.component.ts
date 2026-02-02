@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SKETCHES } from '../sketches';
+import { LanguageService } from '../language.service';
+import { SketchMetadata } from '../sketches/types';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +12,6 @@ import { SKETCHES } from '../sketches';
   styleUrl: './home.css'
 })
 export class HomeComponent {
-  // Now fetching metadata directly from the sketch instances
-  sketches = SKETCHES.map(s => s.metadata);
+  public readonly langService = inject(LanguageService);
+  sketches: SketchMetadata[] = SKETCHES.map(s => s.metadata);
 }

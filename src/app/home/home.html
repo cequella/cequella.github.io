@@ -6,20 +6,26 @@
     <div class="hero-grid">
         <div class="hero-left-block black-block" style="position: relative;">
             <h1 class="hero-title glitch-shake">
-                <span class="glitch-text" data-text="Art">Art</span> <br>
-                <span class="glitch-text" data-text="Is">Is</span> <br>
-                <span class="glitch-text" data-text="Service">Service</span>
+                <span class="glitch-text" [attr.data-text]="langService.lang() === 'pt' ? 'Arte' : 'Art'">{{
+                    langService.lang() === 'pt' ? 'Arte' : 'Art' }}</span> <br>
+                <span class="glitch-text" [attr.data-text]="langService.lang() === 'pt' ? 'É' : 'Is'">{{
+                    langService.lang() === 'pt' ? 'É' : 'Is' }}</span> <br>
+                <span class="glitch-text" [attr.data-text]="langService.lang() === 'pt' ? 'Serviço' : 'Service'">{{
+                    langService.lang() === 'pt' ? 'Serviço' : 'Service' }}</span>
             </h1>
         </div>
         <div class="hero-right-block">
             <div class="hero-red-slab red-block diagonal-cut">
                 <p class="hero-subtitle glitch-flicker">
-                    Generative Algorithmic Laboratory
+                    {{ langService.lang() === 'pt' ? 'Laboratório Algorítmico Generativo' : 'Generative Algorithmic
+                    Laboratory' }}
                 </p>
             </div>
             <p class="manifesto-text">
-                WE DO NOT ABSTRACT. WE CONSTRUCT. <br>
-                Exploring the intersection of mathematical logic and visual propaganda.
+                {{ langService.lang() === 'pt' ? 'NÃO ABSTRAÍMOS. NÓS CONSTRUÍMOS.' : 'WE DO NOT ABSTRACT. WE
+                CONSTRUCT.' }} <br>
+                {{ langService.lang() === 'pt' ? 'Explorando a intersecção entre lógica matemática e propaganda visual.'
+                : 'Exploring the intersection of mathematical logic and visual propaganda.' }}
             </p>
         </div>
     </div>
@@ -27,7 +33,7 @@
 
 <section class="portfolio-section container">
     <div class="section-header">
-        <h2 class="section-title black-block">The Archives</h2>
+        <h2 class="section-title black-block">{{ langService.lang() === 'pt' ? 'Os Arquivos' : 'The Archives' }}</h2>
         <div class="red-line"></div>
     </div>
 
@@ -36,13 +42,14 @@
         <a [routerLink]="['/art', sketch.id]" class="archive-card heavy-border">
             <div class="card-number">{{ '0' + (i + 1) }}</div>
             <div class="card-image-container">
-                <img [src]="sketch.image" [alt]="sketch.title" class="archive-image">
+                <img [src]="sketch.image" [alt]="$any(sketch.title)[langService.lang()]" class="archive-image">
                 <div class="card-tag red-block">{{ sketch.id.replace('-', ' ') }}</div>
             </div>
             <div class="card-info">
-                <h3>{{ sketch.title }}</h3>
-                <p>{{ sketch.description }}</p>
-                <span class="card-action">Enter Program &rarr;</span>
+                <h3>{{ $any(sketch.title)[langService.lang()] }}</h3>
+                <p>{{ $any(sketch.description)[langService.lang()] }}</p>
+                <span class="card-action">{{ langService.lang() === 'pt' ? 'Entrar no Programa' : 'Enter Program' }}
+                    &rarr;</span>
             </div>
         </a>
         }

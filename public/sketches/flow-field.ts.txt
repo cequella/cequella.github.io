@@ -1,5 +1,5 @@
 import { createNoise3D } from 'simplex-noise';
-import { Sketch } from './types';
+import { Sketch, SketchMetadata } from './types';
 
 export class FlowFieldSketch implements Sketch {
     private ctx: CanvasRenderingContext2D | null = null;
@@ -10,11 +10,17 @@ export class FlowFieldSketch implements Sketch {
     private noise3D = createNoise3D();
     private zOff = 0;
 
-    metadata = {
+    readonly metadata: SketchMetadata = {
         image: '/flow-field.png',
         id: 'flow-field',
-        title: 'Neon Flow Field',
-        description: 'Thousands of particles following Perlin noise vectors in a fluid dance.',
+        title: {
+            pt: 'Campo de Fluxo Neon',
+            en: 'Neon Flow Field'
+        },
+        description: {
+            pt: 'Milhares de partículas seguindo vetores de ruído Perlin em uma dança fluida.',
+            en: 'Thousands of particles following Perlin noise vectors in a fluid dance.'
+        },
     }
 
     setup(canvas: HTMLCanvasElement) {
