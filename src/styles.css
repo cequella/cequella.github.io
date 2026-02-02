@@ -218,7 +218,7 @@ body::before {
 
 .glitch-text::after {
   left: -2px;
-  text-shadow: -2px 0 #fff;
+  text-shadow: -2px 0 var(--bg-color);
   clip: rect(44px, 450px, 56px, 0);
   animation: glitch-anim2 5s infinite linear alternate-reverse;
 }
