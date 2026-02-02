@@ -1,0 +1,18 @@
+<div class="art-viewer-container">
+    <canvas #canvas class="art-canvas"></canvas>
+
+    <div class="overlay-container">
+        <a routerLink="/" class="back-link glass-panel">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Back to Gallery
+        </a>
+
+        <div class="info-panel glass-panel">
+            <h1 class="art-title">{{ currentInfo.title }}</h1>
+            <p class="art-description">{{ currentInfo.desc }}</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<section class="hero-section">
+    <div class="container hero-content">
+        <h1 class="hero-title">
+            Creative <span class="gradient-text">Developer</span> <br>
+            & Generative <span class="gradient-text">Artist</span>
+        </h1>
+        <p class="hero-subtitle">
+            Crafting digital experiences where logic meets aesthetics.
+        </p>
+    </div>
+</section>
+
+<section class="portfolio-section container">
+    <h2 class="section-title">Latest Sketches</h2>
+    <div class="grid">
+        @for (sketch of sketches; track sketch.id) {
+        <a [routerLink]="['/art', sketch.id]" class="card glass-panel">
+            <div class="card-image-wrapper">
+                <img [src]="sketch.image" [alt]="sketch.title" class="card-image">
+                <div class="card-overlay">
+                    <span class="view-btn">View Sketch</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <h3>{{ sketch.title }}</h3>
+                <p>{{ sketch.description }}</p>
+            </div>
+        </a>
+        }
+    </div>
+</section>
