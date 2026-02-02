@@ -1,0 +1,11 @@
+export interface Sketch {
+    metadata: {
+        id: string;
+        image: string;
+        title: string;
+        description: string;
+    };
+    setup(canvas: HTMLCanvasElement): void;
+    destroy(): void;
+    resize(width: number, height: number): void;
+}
