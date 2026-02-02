@@ -1,0 +1,15 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fundo Escuro Construtivista -->
+  <rect width="32" height="32" fill="#0d0d0d"/>
+  
+  <!-- Estrela Construtivista (Geométrica e Fragmentada) -->
+  <!-- Metade Esquerda: Vermelho -->
+  <path d="M16 4 L19 13 L28 13 L21 19 L24 28 L16 22 L8 28 L11 19 L4 13 L13 13 Z" fill="#cc2222"/>
+  
+  <!-- Detalhe Branco (Sombra de Alto Contraste / Divisão) -->
+  <path d="M16 4 L16 22 L8 28 L11 19 L4 13 L13 13 Z" fill="#FAFAFA" fill-opacity="0.9"/>
+  
+  <!-- Linhas Estruturais Estilo Suprematista -->
+  <rect x="0" y="15.5" width="32" height="1" fill="#FAFAFA" fill-opacity="0.2"/>
+  <rect x="15.5" y="0" width="1" height="32" fill="#FAFAFA" fill-opacity="0.2"/>
+</svg>
