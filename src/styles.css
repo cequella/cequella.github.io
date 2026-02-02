@@ -1,27 +1,27 @@
 :root {
-  /* Colors - Russian Constructivist Palette */
-  --bg-primary: #e6e2d3;
-  /* Aged Paper */
-  --bg-dark: #111111;
-  /* Ink Black */
+  /* Default Theme (Light/Aged Paper) */
+  --bg-color: #e6e2d3;
+  --text-color: #111111;
+  --surface-color: #111111;
+  --surface-text: #e6e2d3;
   --accent-red: #cc2222;
-  /* Poster Red */
 
-  --text-primary: #111111;
-  --text-on-dark: #e6e2d3;
-  --text-neutral: #555555;
-
-  /* Typography */
   --font-heading: 'Staatliches', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-serif: 'Crimson Pro', serif;
 
-  /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 2rem;
   --spacing-lg: 4rem;
   --container-width: 1400px;
+}
+
+[data-theme='dark'] {
+  --bg-color: #111111;
+  --text-color: #e6e2d3;
+  --surface-color: #e6e2d3;
+  --surface-text: #111111;
 }
 
 * {
@@ -31,8 +31,8 @@
 }
 
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--bg-color);
+  color: var(--text-color);
   font-family: var(--font-body);
   line-height: 1.4;
   overflow-x: hidden;
@@ -64,17 +64,17 @@ a {
 }
 
 .heavy-border {
-  border: 4px solid var(--bg-dark);
+  border: 4px solid var(--text-color);
 }
 
 .red-block {
   background-color: var(--accent-red);
-  color: var(--text-on-dark);
+  color: white;
 }
 
 .black-block {
-  background-color: var(--bg-dark);
-  color: var(--text-on-dark);
+  background-color: var(--surface-color);
+  color: var(--surface-text);
   background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
   background-size: 4px 4px;
 }
@@ -88,8 +88,8 @@ a {
   display: inline-flex;
   align-items: center;
   padding: 1rem 2rem;
-  background: var(--bg-dark);
-  color: var(--text-on-dark);
+  background: var(--surface-color);
+  color: var(--surface-text);
   font-family: var(--font-heading);
   font-size: 1.25rem;
   text-transform: uppercase;
@@ -127,11 +127,15 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--bg-color);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-dark);
+  background: var(--text-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-red);
 }
 
 /* Grain Texture Overlay */
@@ -161,6 +165,11 @@ body::before {
   filter: contrast(1.2);
 }
 
+[data-theme='dark'] .soviet-star {
+  mix-blend-mode: screen;
+  filter: brightness(1.2) contrast(1.1);
+}
+
 .montage-float {
   position: absolute;
   width: 300px;
@@ -174,8 +183,9 @@ body::before {
   box-shadow: 15px 15px 0 var(--accent-red);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-red);
+[data-theme='dark'] .montage-float {
+  mix-blend-mode: screen;
+  filter: invert(1) sepia(1) hue-rotate(320deg) contrast(1.2);
 }
 
 /* Glitch Effects */

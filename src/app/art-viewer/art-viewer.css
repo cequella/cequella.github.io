@@ -4,7 +4,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: var(--bg-dark);
+    background-color: #000;
     z-index: 2000;
 }
 
@@ -21,6 +21,8 @@
     justify-content: space-between;
     border-right: 8px solid var(--accent-red);
     overflow-y: auto;
+    background-color: var(--surface-color);
+    color: var(--surface-text);
 }
 
 .back-link {
@@ -38,7 +40,7 @@
 
 .red-flag {
     background-color: var(--accent-red);
-    color: var(--text-on-dark);
+    color: white;
     padding: 0.25rem 0.5rem;
     font-family: var(--font-heading);
     font-size: 0.9rem;
@@ -50,7 +52,7 @@
     font-size: 4rem;
     line-height: 0.9;
     margin-bottom: 1.5rem;
-    color: var(--text-on-dark);
+    color: inherit;
 }
 
 .divider {
@@ -63,13 +65,14 @@
 .art-description {
     font-family: var(--font-serif);
     font-size: 1.25rem;
-    color: var(--text-on-dark);
+    color: inherit;
     line-height: 1.5;
     margin-bottom: 3rem;
+    opacity: 0.9;
 }
 
 .system-stats {
-    border-top: 1px solid #333;
+    border-top: 1px solid rgba(128, 128, 128, 0.3);
     padding-top: 2rem;
 }
 
@@ -78,7 +81,8 @@
     justify-content: space-between;
     font-family: var(--font-heading);
     font-size: 1rem;
-    color: #888;
+    color: inherit;
+    opacity: 0.6;
     margin-bottom: 0.5rem;
 }
 
@@ -87,6 +91,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    opacity: 1;
 }
 
 .active-dot::before {
