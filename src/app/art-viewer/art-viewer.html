@@ -6,10 +6,10 @@
             </a>
 
             <div class="info-content">
-                <div class="red-flag">PROGRAM ID: {{ sketchId.toUpperCase() }}</div>
-                <h1 class="art-title">{{ currentInfo.title }}</h1>
+                <div class="red-flag">PROGRAM ID: {{ sketchId().toUpperCase() }}</div>
+                <h1 class="art-title">{{ currentInfo().title }}</h1>
                 <div class="divider"></div>
-                <p class="art-description">{{ currentInfo.desc }}</p>
+                <p class="art-description">{{ currentInfo().desc }}</p>
 
                 <div class="system-stats">
                     <div class="stat-row">
@@ -21,6 +21,17 @@
                         <span>GENERATIVE</span>
                     </div>
                 </div>
+
+                <div class="action-panel">
+                    <button class="btn-code" (click)="toggleCode()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                        </svg>
+                        VIEW::SOURCE
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -29,4 +40,18 @@
             <div class="corner-label">UNIT-01</div>
         </div>
     </div>
+
+    @if (showingCode()) {
+    <div class="code-modal-overlay" (click)="toggleCode()">
+        <div class="code-modal black-block" (click)="$event.stopPropagation()">
+            <div class="modal-header red-block">
+                <span>SOURCE::{{ sketchId().toUpperCase() }}.TS</span>
+                <button class="close-btn" (click)="toggleCode()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <pre><code [innerHTML]="highlightedCode()" class="hljs language-typescript"></code></pre>
+            </div>
+        </div>
+    </div>
+    }
 </div>

@@ -1,53 +1,55 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnInit, inject, ViewEncapsulation, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { Sketch } from '../sketches/types';
-import { FlowFieldSketch } from '../sketches/flow-field';
-import { FractalTreeSketch } from '../sketches/fractal-tree';
+import { getSketchById } from '../sketches';
+import hljs from 'highlight.js/lib/core';
+import typescript from 'highlight.js/lib/languages/typescript';
+
+// Register language
+hljs.registerLanguage('typescript', typescript);
 
 @Component({
   selector: 'app-art-viewer',
   standalone: true,
   imports: [RouterLink],
   templateUrl: './art-viewer.html',
-  styleUrl: './art-viewer.css'
+  styleUrl: './art-viewer.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class ArtViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('canvas') canvasRef!: ElementRef<HTMLCanvasElement>;
+  private http = inject(HttpClient);
+
   currentSketch: Sketch | null = null;
-  sketchId: string = '';
+  sketchId = signal<string>('');
+  currentInfo = signal({ title: '', desc: '' });
 
-  sketchInfo: Record<string, { title: string, desc: string }> = {
-    'flow-field': {
-      title: 'Neon Flow Field',
-      desc: 'Simulated particles interacting with a 3D Simplex noise vector field. The z-axis of the noise moves over time, creating shifting patterns.'
-    },
-    'fractal-tree': {
-      title: 'Recursive Blooms',
-      desc: 'A visualization of a recursive branching fractals. The branching angle oscillates sinusoidally over time, mimicking a "breathing" or "blooming" motion.'
-    }
-  };
-
-  currentInfo = { title: '', desc: '' };
+  showingCode = signal(false);
+  sourceCode = signal('');
+  highlightedCode = signal('');
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.sketchId = params['id'];
-      this.currentInfo = this.sketchInfo[this.sketchId] || { title: 'Unknown Sketch', desc: '' };
-      // If the view is already initialized, reload the sketch can happen here, 
-      // or in the setter if we used logic there. 
-      // For simplicity, we just trigger load if canvas is ready.
-      if (this.canvasRef) {
-        this.loadSketch();
+      const newId = params['id'];
+      if (newId !== this.sketchId()) {
+        this.sketchId.set(newId);
+        this.sourceCode.set('');
+        this.highlightedCode.set('');
+        this.showingCode.set(false);
+
+        if (this.canvasRef) {
+          this.loadSketch();
+        }
       }
     });
   }
 
   ngAfterViewInit() {
     window.addEventListener('resize', this.onResize);
-    // Determine initial load
-    if (this.sketchId) {
+    if (this.sketchId() && !this.currentSketch) {
       this.loadSketch();
     }
   }
@@ -55,25 +57,56 @@ export class ArtViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   loadSketch() {
     if (this.currentSketch) {
       this.currentSketch.destroy();
+      this.currentSketch = null;
     }
 
-    const canvas = this.canvasRef.nativeElement;
-    // Set canvas to full window size (ignoring parent layout flow, effectively fullscreen)
-    // Note: We might want headers to be overlayed.
-    this.resizeCanvas();
+    const sketch = getSketchById(this.sketchId());
+    if (sketch) {
+      this.currentSketch = sketch;
+      this.currentInfo.set({
+        title: sketch.metadata.title,
+        desc: sketch.metadata.description
+      });
 
-    if (this.sketchId === 'flow-field') {
-      this.currentSketch = new FlowFieldSketch();
-    } else if (this.sketchId === 'fractal-tree') {
-      this.currentSketch = new FractalTreeSketch();
-    }
-
-    if (this.currentSketch) {
-      this.currentSketch.setup(canvas);
+      setTimeout(() => {
+        if (this.canvasRef) {
+          const canvas = this.canvasRef.nativeElement;
+          this.resizeCanvas();
+          sketch.setup(canvas);
+        }
+      }, 0);
+    } else {
+      this.currentInfo.set({ title: 'Unknown Sketch', desc: '' });
     }
   }
 
+  toggleCode() {
+    const isShowing = this.showingCode();
+    this.showingCode.set(!isShowing);
+    if (!isShowing && !this.sourceCode()) {
+      this.fetchSource();
+    }
+  }
+
+  fetchSource() {
+    const srcPath = `/sketches/${this.sketchId()}.ts.txt`;
+    this.http.get(srcPath, { responseType: 'text' }).subscribe({
+      next: (code) => {
+        this.sourceCode.set(code);
+        const highlighted = hljs.highlight(code, { language: 'typescript' }).value;
+        this.highlightedCode.set(highlighted);
+      },
+      error: (err) => {
+        console.error('Failed to fetch source:', err);
+        const msg = 'Failed to load source code.';
+        this.sourceCode.set(msg);
+        this.highlightedCode.set(msg);
+      }
+    });
+  }
+
   resizeCanvas() {
+    if (!this.canvasRef) return;
     const canvas = this.canvasRef.nativeElement;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -82,8 +115,7 @@ export class ArtViewerComponent implements AfterViewInit, OnDestroy, OnInit {
   onResize = () => {
     this.resizeCanvas();
     if (this.currentSketch && this.canvasRef) {
-      const canvas = this.canvasRef.nativeElement;
-      this.currentSketch.resize(canvas.width, canvas.height);
+      this.currentSketch.resize(this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
     }
   }
 
