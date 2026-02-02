@@ -28,9 +28,15 @@ export class FractalTreeSketch implements Sketch {
         this.ctx.beginPath();
         this.ctx.moveTo(x, y);
         this.ctx.lineTo(endX, endY);
-        // Gold to Pink gradient based on depth
-        this.ctx.strokeStyle = `hsla(${40 + depth * 30}, 80%, 60%, ${depth / 12 + 0.2})`;
-        this.ctx.lineWidth = depth * 0.8;
+
+        // Constructivist palette: Red, White, or Darker Grey
+        if (depth > 8) {
+            this.ctx.strokeStyle = '#cc2222'; // Bold Red for trunk
+        } else {
+            this.ctx.strokeStyle = depth % 2 === 0 ? '#cc2222' : '#e6e2d3';
+        }
+
+        this.ctx.lineWidth = depth * 1.5;
         this.ctx.stroke();
 
         const newLen = len * 0.75;
@@ -40,7 +46,7 @@ export class FractalTreeSketch implements Sketch {
 
     animate = () => {
         if (!this.ctx) return;
-        this.ctx.fillStyle = 'rgba(5, 5, 5, 1)'; // Clear fully
+        this.ctx.fillStyle = '#111111'; // Pure Dark
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         // Oscillate angle slowly

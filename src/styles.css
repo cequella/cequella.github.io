@@ -1,26 +1,27 @@
 :root {
-  /* Colors */
-  --bg-primary: #050505;
-  --bg-secondary: #0f0f11;
-  --bg-glass: rgba(20, 20, 23, 0.7);
-  
-  --text-primary: #ffffff;
-  --text-secondary: #a1a1aa;
-  
-  --accent-primary: #6366f1; /* Indigo */
-  --accent-glow: rgba(99, 102, 241, 0.5);
-  --accent-secondary: #ec4899; /* Pink */
-  
+  /* Colors - Russian Constructivist Palette */
+  --bg-primary: #e6e2d3;
+  /* Aged Paper */
+  --bg-dark: #111111;
+  /* Ink Black */
+  --accent-red: #cc2222;
+  /* Poster Red */
+
+  --text-primary: #111111;
+  --text-on-dark: #e6e2d3;
+  --text-neutral: #555555;
+
   /* Typography */
-  --font-heading: 'Outfit', sans-serif;
+  --font-heading: 'Staatliches', sans-serif;
   --font-body: 'Inter', sans-serif;
-  
+  --font-serif: 'Crimson Pro', serif;
+
   /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 2rem;
   --spacing-lg: 4rem;
-  --container-width: 1200px;
+  --container-width: 1400px;
 }
 
 * {
@@ -33,102 +34,104 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-body);
-  line-height: 1.6;
+  line-height: 1.4;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
-  font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
 }
 
 a {
-  color: var(--accent-primary);
+  color: inherit;
   text-decoration: none;
 }
 
-/* Utilities */
+/* Constructivist Utilities */
 .container {
   max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 var(--spacing-sm);
+  padding: 0 var(--spacing-md);
 }
 
-.glass-panel {
-  background: var(--bg-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+.heavy-border {
+  border: 4px solid var(--bg-dark);
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
+.red-block {
+  background-color: var(--accent-red);
+  color: var(--text-on-dark);
+}
+
+.black-block {
+  background-color: var(--bg-dark);
+  color: var(--text-on-dark);
+}
+
+.diagonal-cut {
+  clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
 }
 
 /* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
+  padding: 1rem 2rem;
+  background: var(--bg-dark);
+  color: var(--text-on-dark);
   font-family: var(--font-heading);
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: var(--accent-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px -5px var(--accent-glow);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  font-size: 1.25rem;
+  text-transform: uppercase;
   border: none;
-  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  position: relative;
 }
 
-.btn-primary:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 0 30px -5px var(--accent-glow);
+.btn:active {
+  transform: translate(2px, 2px);
 }
 
-/* Animations */
-@keyframes coin-float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--accent-red);
+  z-index: -1;
 }
 
-.animate-float {
-  animation: coin-float 4s ease-in-out infinite;
+/* Grid System */
+.retro-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--spacing-sm);
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg-primary);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
+  background: var(--bg-dark);
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--accent-red);
 }

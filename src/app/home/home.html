@@ -1,29 +1,42 @@
-<section class="hero-section">
-    <div class="container hero-content">
-        <h1 class="hero-title">
-            Creative <span class="gradient-text">Developer</span> <br>
-            & Generative <span class="gradient-text">Artist</span>
-        </h1>
-        <p class="hero-subtitle">
-            Crafting digital experiences where logic meets aesthetics.
-        </p>
+<section class="hero-section container">
+    <div class="hero-grid">
+        <div class="hero-left-block black-block">
+            <h1 class="hero-title">
+                Art <br> Is <br> Service
+            </h1>
+        </div>
+        <div class="hero-right-block">
+            <div class="hero-red-slab red-block diagonal-cut">
+                <p class="hero-subtitle">
+                    Generative Algorithmic Laboratory
+                </p>
+            </div>
+            <p class="manifesto-text">
+                WE DO NOT ABSTRACT. WE CONSTRUCT. <br>
+                Exploring the intersection of mathematical logic and visual propaganda.
+            </p>
+        </div>
     </div>
 </section>
 
 <section class="portfolio-section container">
-    <h2 class="section-title">Latest Sketches</h2>
-    <div class="grid">
-        @for (sketch of sketches; track sketch.id) {
-        <a [routerLink]="['/art', sketch.id]" class="card glass-panel">
-            <div class="card-image-wrapper">
-                <img [src]="sketch.image" [alt]="sketch.title" class="card-image">
-                <div class="card-overlay">
-                    <span class="view-btn">View Sketch</span>
-                </div>
+    <div class="section-header">
+        <h2 class="section-title black-block">The Archives</h2>
+        <div class="red-line"></div>
+    </div>
+
+    <div class="archive-grid">
+        @for (sketch of sketches; track sketch.id; let i = $index) {
+        <a [routerLink]="['/art', sketch.id]" class="archive-card heavy-border">
+            <div class="card-number">{{ '0' + (i + 1) }}</div>
+            <div class="card-image-container">
+                <img [src]="sketch.image" [alt]="sketch.title" class="archive-image">
+                <div class="card-tag red-block">{{ sketch.id.replace('-', ' ') }}</div>
             </div>
-            <div class="card-content">
+            <div class="card-info">
                 <h3>{{ sketch.title }}</h3>
                 <p>{{ sketch.description }}</p>
+                <span class="card-action">Enter Program &rarr;</span>
             </div>
         </a>
         }

@@ -21,7 +21,7 @@ export class FlowFieldSketch implements Sketch {
         this.height = h;
         this.initParticles();
         if (this.ctx) {
-            this.ctx.fillStyle = '#050505';
+            this.ctx.fillStyle = '#111111';
             this.ctx.fillRect(0, 0, w, h);
         }
     }
@@ -33,7 +33,7 @@ export class FlowFieldSketch implements Sketch {
             this.particles.push({
                 x: Math.random() * this.width,
                 y: Math.random() * this.height,
-                hue: Math.random() * 80 + 200 // Blue -> Purple -> Pink
+                hue: Math.random() > 0.8 ? 0 : 40 // Pure Red or off-white/greyish
             });
         }
     }
@@ -41,14 +41,13 @@ export class FlowFieldSketch implements Sketch {
     animate = () => {
         if (!this.ctx) return;
 
-        // Trail effect (fading previous frames)
-        this.ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
+        // Trail effect
+        this.ctx.fillStyle = 'rgba(17, 17, 17, 0.05)';
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         this.zOff += 0.002;
 
         this.particles.forEach(p => {
-            // Noise scale 0.002
             const angle = this.noise3D(p.x * 0.002, p.y * 0.002, this.zOff) * Math.PI * 2;
 
             p.x += Math.cos(angle) * 1.5;
@@ -60,8 +59,12 @@ export class FlowFieldSketch implements Sketch {
             if (p.y < 0) p.y = this.height;
             if (p.y > this.height) p.y = 0;
 
-            this.ctx!.fillStyle = `hsla(${p.hue}, 80%, 60%, 0.8)`;
-            this.ctx!.fillRect(p.x, p.y, 2, 2);
+            if (p.hue === 0) {
+                this.ctx!.fillStyle = '#cc2222'; // Poster Red
+            } else {
+                this.ctx!.fillStyle = 'rgba(230, 226, 211, 0.6)'; // Aged Paper White
+            }
+            this.ctx!.fillRect(p.x, p.y, 1.5, 1.5);
         });
 
         this.animationId = requestAnimationFrame(this.animate);
