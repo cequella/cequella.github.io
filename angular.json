@@ -23,7 +23,8 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/404.html"
             ],
             "styles": [
               "src/styles.css"
