@@ -149,6 +149,10 @@
     color: var(--accent-red);
 }
 
+.archive-card:hover .card-action {
+    animation: flicker 0.1s infinite;
+}
+
 @media (max-width: 992px) {
     .hero-grid {
         grid-template-columns: 1fr;
