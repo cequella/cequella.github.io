@@ -1,10 +1,10 @@
 <header class="main-header">
   <div class="container header-content">
-    <a routerLink="/" class="logo">GALERIA::GENERA</a>
+    <a routerLink="/" class="logo">D::Çeqüella</a>
     <nav class="nav-links">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <!-- <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
         {{ langService.lang() === 'pt' ? 'ARQUIVOS' : 'ARCHIVES' }}
-      </a>
+      </a> -->
 
       <div class="header-actions">
         <button class="lang-toggle" (click)="langService.toggleLanguage()">
@@ -43,8 +43,8 @@
 
 <footer class="main-footer">
   <div class="container">
-    <p>
-      {{ langService.lang() === 'pt' ? 'ESTRUTURA DE DADOS & ESTÉTICA RADICAL' : 'DATA STRUCTURE & RADICAL AESTHETICS'
+    <p>&copy;
+      {{ langService.lang() === 'pt' ? 'Cequell::DEV Criado com Angular' : 'Cequell::DEV Built with Angular'
       }} // 2026
     </p>
   </div>

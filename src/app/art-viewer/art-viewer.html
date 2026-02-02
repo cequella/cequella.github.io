@@ -2,7 +2,7 @@
     <div class="viewer-layout">
         <div class="side-panel black-block">
             <a routerLink="/" class="back-link">
-                &lsaquo; {{ langService.lang() === 'pt' ? 'RETORNAR À BASE' : 'RETURN TO BASE' }}
+                &lsaquo; {{ langService.lang() === 'pt' ? 'RETORNAR À BASE' : 'RETURN TO HOME' }}
             </a>
 
             <div class="info-content">
@@ -34,7 +34,7 @@
                             <polyline points="16 18 22 12 16 6" />
                             <polyline points="8 6 2 12 8 18" />
                         </svg>
-                        VIEW::SOURCE
+                        {{ langService.lang() === 'pt' ? 'VER::FONTE' : 'VIEW::SOURCE' }}
                     </button>
                 </div>
             </div>
@@ -50,7 +50,7 @@
     <div class="code-modal-overlay" (click)="toggleCode()">
         <div class="code-modal black-block" (click)="$event.stopPropagation()">
             <div class="modal-header red-block">
-                <span>SOURCE::{{ sketchId().toUpperCase() }}.TS</span>
+                <span>{{ langService.lang() === 'pt' ? 'FONTE' : 'SOURCE' }}::{{ sketchId().toUpperCase() }}.TS</span>
                 <button class="close-btn" (click)="toggleCode()">&times;</button>
             </div>
             <div class="modal-body">

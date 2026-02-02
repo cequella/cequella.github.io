@@ -10,22 +10,20 @@
                     langService.lang() === 'pt' ? 'Arte' : 'Art' }}</span> <br>
                 <span class="glitch-text" [attr.data-text]="langService.lang() === 'pt' ? 'É' : 'Is'">{{
                     langService.lang() === 'pt' ? 'É' : 'Is' }}</span> <br>
-                <span class="glitch-text" [attr.data-text]="langService.lang() === 'pt' ? 'Serviço' : 'Service'">{{
-                    langService.lang() === 'pt' ? 'Serviço' : 'Service' }}</span>
+                <span class="glitch-text" [attr.data-text]="langService.lang() === 'pt' ? 'Política' : 'Policy'">{{
+                    langService.lang() === 'pt' ? 'Política' : 'Policy' }}</span>
             </h1>
         </div>
         <div class="hero-right-block">
             <div class="hero-red-slab red-block diagonal-cut">
                 <p class="hero-subtitle glitch-flicker">
-                    {{ langService.lang() === 'pt' ? 'Laboratório Algorítmico Generativo' : 'Generative Algorithmic
-                    Laboratory' }}
+                    {{ langService.lang() === 'pt' ? 'Laboratório Pessoal de Arte' : 'Personal Art Laboratory' }}
                 </p>
             </div>
             <p class="manifesto-text">
-                {{ langService.lang() === 'pt' ? 'NÃO ABSTRAÍMOS. NÓS CONSTRUÍMOS.' : 'WE DO NOT ABSTRACT. WE
-                CONSTRUCT.' }} <br>
-                {{ langService.lang() === 'pt' ? 'Explorando a intersecção entre lógica matemática e propaganda visual.'
-                : 'Exploring the intersection of mathematical logic and visual propaganda.' }}
+                {{ langService.lang() === 'pt' ? 'NÃO ABSTRAIO: CONSTRUO.' : 'WE DO NOT ABSTRACT. WE CONSTRUCT.' }} <br>
+                {{ langService.lang() === 'pt' ? 'Explorando a intersecção entre lógica matemática e arte visual.'
+                : 'Exploring the intersection of mathematical logic and visual art.' }}
             </p>
         </div>
     </div>
@@ -33,7 +31,7 @@
 
 <section class="portfolio-section container">
     <div class="section-header">
-        <h2 class="section-title black-block">{{ langService.lang() === 'pt' ? 'Os Arquivos' : 'The Archives' }}</h2>
+        <h2 class="section-title black-block">{{ langService.lang() === 'pt' ? 'Galeria' : 'The Gallery' }}</h2>
         <div class="red-line"></div>
     </div>
 
@@ -48,7 +46,7 @@
             <div class="card-info">
                 <h3>{{ $any(sketch.title)[langService.lang()] }}</h3>
                 <p>{{ $any(sketch.description)[langService.lang()] }}</p>
-                <span class="card-action">{{ langService.lang() === 'pt' ? 'Entrar no Programa' : 'Enter Program' }}
+                <span class="card-action">{{ langService.lang() === 'pt' ? 'Ver Detalhes' : 'View Details' }}
                     &rarr;</span>
             </div>
         </a>
