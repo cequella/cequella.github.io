@@ -1,0 +1,67 @@
+<div class="article-container">
+    @if (article) {
+    <header class="article-header">
+        <a routerLink="/" class="back-link">
+            <span class="icon">←</span> {{ langService.lang() === 'pt' ? 'Voltar' : 'Back' }}
+        </a>
+        <h1 class="article-title">{{ langService.lang() === 'pt' ? article.title.pt : article.title.en }}</h1>
+        <div class="article-meta">
+            <span class="author">By {{ article.author }}</span> <span class="divider">/</span> <span class="date">{{
+                article.date | date }}</span>
+        </div>
+    </header>
+
+    <main class="article-content">
+        @for (section of article.sections; track section) {
+
+        <!-- Heading Section -->
+        @if (section.type === 'heading') {
+        <h2 class="section-heading">
+            {{ section.content }}
+        </h2>
+        }
+
+        <!-- Text Section -->
+        @if (section.type === 'text') {
+        <p class="section-text">
+            {{ section.content }}
+        </p>
+        }
+
+        <!-- Image Section -->
+        @if (section.type === 'image') {
+        <figure class="section-image">
+            <div class="image-wrapper">
+                <img [src]="section.imageUrl"
+                    [alt]="section.caption ? (langService.lang() === 'pt' ? section.caption.pt : section.caption.en) : ''">
+            </div>
+            @if (section.caption) {
+            <figcaption class="caption">
+                {{ langService.lang() === 'pt' ? section.caption.pt : section.caption.en }}
+            </figcaption>
+            }
+        </figure>
+        }
+
+        <!-- Sketch Section -->
+        @if (section.type === 'sketch') {
+        <div class="section-sketch">
+            <div class="canvas-wrapper">
+                <canvas #canvas></canvas>
+            </div>
+            @if (section.caption) {
+            <figcaption class="caption">
+                {{ langService.lang() === 'pt' ? section.caption.pt : section.caption.en }}
+            </figcaption>
+            }
+        </div>
+        }
+        }
+    </main>
+    } @else {
+    <div class="error-container">
+        <p>Artigo não encontrado.</p>
+        <a routerLink="/" class="back-link">Voltar ao início</a>
+    </div>
+    }
+</div>

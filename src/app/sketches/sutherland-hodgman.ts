@@ -174,24 +174,24 @@ export class SutherlandHodgmanSketch implements Sketch {
         // Left
         result = this.clip(result, p => p.x >= x, (a, b) => ({
             x: x,
-            y: a.y + (b.y - a.y) * (x - a.x) / (b.x - a.x)
+            y: a.y + (b.y - a.y) * (x - a.x) / (Math.abs(b.x - a.x) < 0.0001 ? 1 : (b.x - a.x))
         }));
 
         // Right
         result = this.clip(result, p => p.x <= x + w, (a, b) => ({
             x: x + w,
-            y: a.y + (b.y - a.y) * (x + w - a.x) / (b.x - a.x)
+            y: a.y + (b.y - a.y) * (x + w - a.x) / (Math.abs(b.x - a.x) < 0.0001 ? 1 : (b.x - a.x))
         }));
 
         // Top
         result = this.clip(result, p => p.y >= y, (a, b) => ({
-            x: a.x + (b.x - a.x) * (y - a.y) / (b.y - a.y),
+            x: a.x + (b.x - a.x) * (y - a.y) / (Math.abs(b.y - a.y) < 0.0001 ? 1 : (b.y - a.y)),
             y: y
         }));
 
         // Bottom
         result = this.clip(result, p => p.y <= y + h, (a, b) => ({
-            x: a.x + (b.x - a.x) * (y + h - a.y) / (b.y - a.y),
+            x: a.x + (b.x - a.x) * (y + h - a.y) / (Math.abs(b.y - a.y) < 0.0001 ? 1 : (b.y - a.y)),
             y: y + h
         }));
 

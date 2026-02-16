@@ -1,0 +1,114 @@
+.article-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    color: var(--text-color);
+}
+
+.article-header {
+    margin-bottom: 4rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+    opacity: 0.6;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    transition: opacity 0.2s;
+}
+
+.back-link:hover {
+    opacity: 1;
+}
+
+.article-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0 0 1rem 0;
+    color: var(--text-color);
+}
+
+.article-meta {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-color);
+    opacity: 0.5;
+    font-size: 0.9rem;
+}
+
+.article-meta .divider {
+    margin: 0 0.5rem;
+}
+
+.article-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.section-heading {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 2rem 0 0.5rem 0;
+    color: var(--text-color);
+}
+
+.section-text {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    opacity: 0.8;
+    margin: 0;
+}
+
+.section-image,
+.section-sketch {
+    margin: 1rem 0;
+}
+
+.image-wrapper,
+.canvas-wrapper {
+    background: var(--surface-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--text-color);
+}
+
+[data-theme='dark'] .image-wrapper,
+[data-theme='dark'] .canvas-wrapper {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.canvas-wrapper canvas {
+    width: 100%;
+    display: block;
+    cursor: pointer;
+}
+
+.caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-color);
+    opacity: 0.6;
+    margin-top: 1rem;
+    padding: 0 1rem;
+    border-left: 2px solid var(--accent-red);
+}
+
+@media (max-width: 600px) {
+    .article-title {
+        font-size: 2rem;
+    }
+}

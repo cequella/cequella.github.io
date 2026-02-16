@@ -126,6 +126,11 @@
     filter: grayscale(0) contrast(1) invert(0);
 }
 
+.article-card .archive-image {
+    mix-blend-mode: normal !important;
+    filter: none !important;
+}
+
 .card-tag {
     position: absolute;
     bottom: 0;
