@@ -4,6 +4,15 @@
         <a routerLink="/" class="back-link">
             <span class="icon">←</span> {{ langService.lang() === 'pt' ? 'Voltar' : 'Back' }}
         </a>
+        @if (article.headerLayers) {
+        <div class="header-canvas-container">
+            <canvas #headerCanvas></canvas>
+        </div>
+        } @else {
+        <div class="featured-image">
+            <img [src]="article.thumbnail" [alt]="article.title[langService.lang()]">
+        </div>
+        }
         <h1 class="article-title">{{ langService.lang() === 'pt' ? article.title.pt : article.title.en }}</h1>
         <div class="article-meta">
             <span class="author">By {{ article.author }}</span> <span class="divider">/</span> <span class="date">{{
@@ -17,14 +26,14 @@
         <!-- Heading Section -->
         @if (section.type === 'heading') {
         <h2 class="section-heading">
-            {{ section.content }}
+            {{ langService.lang() === 'pt' ? section.content?.pt : section.content?.en }}
         </h2>
         }
 
         <!-- Text Section -->
         @if (section.type === 'text') {
         <p class="section-text">
-            {{ section.content }}
+            {{ langService.lang() === 'pt' ? section.content?.pt : section.content?.en }}
         </p>
         }
 
@@ -60,8 +69,8 @@
     </main>
     } @else {
     <div class="error-container">
-        <p>Artigo não encontrado.</p>
-        <a routerLink="/" class="back-link">Voltar ao início</a>
+        <p>{{ langService.lang() === 'pt' ? 'Artigo não encontrado.' : 'Article not found.' }}</p>
+        <a routerLink="/" class="back-link">{{ langService.lang() === 'pt' ? 'Voltar ao início' : 'Back to home' }}</a>
     </div>
     }
 </div>
