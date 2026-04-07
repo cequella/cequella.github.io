@@ -31,6 +31,31 @@
 
 <section class="portfolio-section container">
     <div class="section-header">
+        <h2 class="section-title black-block">{{ langService.lang() === 'pt' ? 'Explorações' : 'Explorations' }}</h2>
+        <div class="red-line"></div>
+    </div>
+
+    <div class="archive-grid">
+        @for (article of articles; track article.id; let i = $index) {
+        <a [routerLink]="['/article', article.id]" class="archive-card heavy-border article-card">
+            <div class="card-number">{{ 'A' + (i + 1) }}</div>
+            <div class="card-image-container">
+                <img [src]="article.thumbnail" [alt]="article.title[langService.lang()]" class="archive-image">
+                <div class="card-tag black-block">{{ langService.lang() === 'pt' ? 'Artigo' : 'Article' }}</div>
+            </div>
+            <div class="card-info">
+                <h3>{{ article.title[langService.lang()] }}</h3>
+                <p>{{ article.author }} • {{ article.date | date }}</p>
+                <span class="card-action">{{ langService.lang() === 'pt' ? 'Ler Artigo' : 'Read Article' }}
+                    &rarr;</span>
+            </div>
+        </a>
+        }
+    </div>
+</section>
+
+<section class="portfolio-section container">
+    <div class="section-header">
         <h2 class="section-title black-block">{{ langService.lang() === 'pt' ? 'Galeria' : 'The Gallery' }}</h2>
         <div class="red-line"></div>
     </div>
