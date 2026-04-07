@@ -3,6 +3,7 @@ import { FractalTreeSketch } from './fractal-tree';
 import { PseudoangleSketch } from './pseudoangle';
 import { SutherlandHodgmanSketch } from './sutherland-hodgman';
 import { DijkstraSketch } from './dijkstra';
+import { SacilottoSketch } from './sacilotto';
 import { Sketch } from './types';
 
 export const SKETCHES = [
@@ -19,5 +20,6 @@ export function getSketchById(id: string): Sketch | undefined {
     if (id === 'pseudoangle') return new PseudoangleSketch();
     if (id === 'sutherland-hodgman') return new SutherlandHodgmanSketch();
     if (id === 'dijkstra') return new DijkstraSketch();
+    if (id === 'sacilotto' || id === 'sacilotto-gen') return new SacilottoSketch();
     return undefined;
 }
