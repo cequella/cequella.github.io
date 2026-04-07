@@ -6,12 +6,12 @@ import { ArticleMetadata } from '../article-types';
 import { getSketchById } from '../sketches';
 import { Sketch } from '../sketches/types';
 import { LanguageService } from '../language.service';
-import { HeaderCanvas } from './header-canvas';
+import { HeaderGlitchComponent } from './header-glitch/header-glitch.component';
 
 @Component({
     selector: 'app-article-viewer',
     standalone: true,
-    imports: [CommonModule, RouterLink, DatePipe],
+    imports: [CommonModule, RouterLink, DatePipe, HeaderGlitchComponent],
     templateUrl: './article-viewer.html',
     styleUrl: './article-viewer.css'
 })
@@ -21,10 +21,8 @@ export class ArticleViewerComponent implements OnInit, OnDestroy, AfterViewInit 
 
     article: ArticleMetadata | null = null;
     private activeSketches: Map<string, { sketch: Sketch, canvas: HTMLCanvasElement }> = new Map();
-    private headerCanvas: HeaderCanvas | null = null;
 
     @ViewChildren('canvas') canvasRefs!: QueryList<ElementRef<HTMLCanvasElement>>;
-    @ViewChildren('headerCanvas') headerCanvasRef!: QueryList<ElementRef<HTMLCanvasElement>>;
 
     ngOnInit() {
         const id = this.route.snapshot.paramMap.get('id');
@@ -37,23 +35,8 @@ export class ArticleViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             this.initAllSketches();
         }
 
-        if (this.headerCanvasRef) {
-            this.headerCanvasRef.changes.subscribe(() => this.initHeaderCanvas());
-            this.initHeaderCanvas();
-        }
     }
 
-    private initHeaderCanvas() {
-        const canvas = this.headerCanvasRef.first?.nativeElement;
-        if (canvas && this.article?.headerLayers) {
-            this.headerCanvas = new HeaderCanvas();
-            const rect = canvas.parentElement?.getBoundingClientRect();
-            if (rect) {
-                this.headerCanvas.resize(rect.width, rect.width * 0.5625);
-            }
-            this.headerCanvas.setup(canvas, this.article.headerLayers);
-        }
-    }
 
     private initAllSketches() {
         if (!this.article || !this.canvasRefs) return;
@@ -71,7 +54,6 @@ export class ArticleViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     ngOnDestroy() {
         this.activeSketches.forEach(s => s.sketch.destroy());
         this.activeSketches.clear();
-        this.headerCanvas?.destroy();
     }
 
     @HostListener('window:resize')
@@ -85,12 +67,6 @@ export class ArticleViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
 
-        if (this.headerCanvas) {
-            const rect = this.headerCanvasRef.first?.nativeElement.parentElement?.getBoundingClientRect();
-            if (rect) {
-                this.headerCanvas.resize(rect.width, rect.width * 0.5625);
-            }
-        }
     }
 
     private initSketch(sketchId: string, canvas: HTMLCanvasElement) {

@@ -5,9 +5,7 @@
             <span class="icon">←</span> {{ langService.lang() === 'pt' ? 'Voltar' : 'Back' }}
         </a>
         @if (article.headerLayers) {
-        <div class="header-canvas-container">
-            <canvas #headerCanvas></canvas>
-        </div>
+        <app-header-glitch [layers]="article.headerLayers"></app-header-glitch>
         } @else {
         <div class="featured-image">
             <img [src]="article.thumbnail" [alt]="article.title[langService.lang()]">
