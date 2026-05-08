@@ -4,6 +4,7 @@ import { PseudoangleSketch } from './pseudoangle';
 import { SutherlandHodgmanSketch } from './sutherland-hodgman';
 import { DijkstraSketch } from './dijkstra';
 import { SacilottoSketch } from './sacilotto';
+import { PixelSortSketch } from './pixel-sort';
 import { Sketch } from './types';
 
 export const SKETCHES = [
@@ -12,6 +13,7 @@ export const SKETCHES = [
     new PseudoangleSketch(),
     new SutherlandHodgmanSketch(),
     new DijkstraSketch(),
+    new PixelSortSketch(),
 ];
 
 export function getSketchById(id: string): Sketch | undefined {
@@ -21,5 +23,6 @@ export function getSketchById(id: string): Sketch | undefined {
     if (id === 'sutherland-hodgman') return new SutherlandHodgmanSketch();
     if (id === 'dijkstra') return new DijkstraSketch();
     if (id === 'sacilotto' || id === 'sacilotto-gen') return new SacilottoSketch();
+    if (id === 'pixel-sort') return new PixelSortSketch();
     return undefined;
 }
