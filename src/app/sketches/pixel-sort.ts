@@ -12,7 +12,10 @@ export class PixelSortSketch implements Sketch {
     // Controls
     private channel: 'red' | 'green' | 'blue' | 'saturation' | 'brightness' | 'hue' = 'brightness';
     private direction: 'up' | 'down' | 'left' | 'right' = 'down';
-    private intensity = 50; // 0 - 100
+    private minThreshold = 20; // 0 - 100
+    private maxThreshold = 80; // 0 - 100
+    private segments = 10; // 1 - 100
+    private randomness = 20; // 0 - 100
 
     readonly metadata: SketchMetadata = {
         id: 'pixel-sort',
@@ -110,8 +113,23 @@ export class PixelSortSketch implements Sketch {
             </div>
 
             <div style="margin-bottom: 1rem;">
-                <label style="display: block; margin-bottom: 0.5rem;">INTENSITY (${this.intensity}):</label>
-                <input type="range" id="ps-intensity" min="0" max="100" value="${this.intensity}" style="width: 100%;">
+                <label id="lbl-min-thresh" style="display: block; margin-bottom: 0.5rem;">MIN THRESHOLD (${this.minThreshold}):</label>
+                <input type="range" id="ps-min-thresh" min="0" max="100" value="${this.minThreshold}" style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label id="lbl-max-thresh" style="display: block; margin-bottom: 0.5rem;">MAX THRESHOLD (${this.maxThreshold}):</label>
+                <input type="range" id="ps-max-thresh" min="0" max="100" value="${this.maxThreshold}" style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label id="lbl-segments" style="display: block; margin-bottom: 0.5rem;">SEGMENTS (${this.segments}):</label>
+                <input type="range" id="ps-segments" min="1" max="100" value="${this.segments}" style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label id="lbl-randomness" style="display: block; margin-bottom: 0.5rem;">RANDOMNESS (${this.randomness}):</label>
+                <input type="range" id="ps-randomness" min="0" max="100" value="${this.randomness}" style="width: 100%;">
             </div>
 
             <button id="ps-process" style="width: 100%; background: #cc2222; color: #fff; border: none; padding: 0.5rem; cursor: pointer; font-weight: bold;">PROCESS</button>
@@ -135,15 +153,37 @@ export class PixelSortSketch implements Sketch {
             this.processAndDraw();
         });
 
-        const intensitySlider = this.uiContainer.querySelector('#ps-intensity') as HTMLInputElement;
-        const intensityLabel = this.uiContainer.querySelector('label[style*="INTENSITY"]') as HTMLLabelElement;
-        intensitySlider.addEventListener('input', (e) => {
-            this.intensity = parseInt((e.target as HTMLInputElement).value);
-            intensityLabel.innerText = `INTENSITY (${this.intensity}):`;
+        const minThreshSlider = this.uiContainer.querySelector('#ps-min-thresh') as HTMLInputElement;
+        const minThreshLabel = this.uiContainer.querySelector('#lbl-min-thresh') as HTMLLabelElement;
+        minThreshSlider.addEventListener('input', (e) => {
+            this.minThreshold = parseInt((e.target as HTMLInputElement).value);
+            minThreshLabel.innerText = `MIN THRESHOLD (${this.minThreshold}):`;
         });
-        intensitySlider.addEventListener('change', () => {
-            this.processAndDraw();
+        minThreshSlider.addEventListener('change', () => this.processAndDraw());
+
+        const maxThreshSlider = this.uiContainer.querySelector('#ps-max-thresh') as HTMLInputElement;
+        const maxThreshLabel = this.uiContainer.querySelector('#lbl-max-thresh') as HTMLLabelElement;
+        maxThreshSlider.addEventListener('input', (e) => {
+            this.maxThreshold = parseInt((e.target as HTMLInputElement).value);
+            maxThreshLabel.innerText = `MAX THRESHOLD (${this.maxThreshold}):`;
         });
+        maxThreshSlider.addEventListener('change', () => this.processAndDraw());
+
+        const segmentsSlider = this.uiContainer.querySelector('#ps-segments') as HTMLInputElement;
+        const segmentsLabel = this.uiContainer.querySelector('#lbl-segments') as HTMLLabelElement;
+        segmentsSlider.addEventListener('input', (e) => {
+            this.segments = parseInt((e.target as HTMLInputElement).value);
+            segmentsLabel.innerText = `SEGMENTS (${this.segments}):`;
+        });
+        segmentsSlider.addEventListener('change', () => this.processAndDraw());
+
+        const randomnessSlider = this.uiContainer.querySelector('#ps-randomness') as HTMLInputElement;
+        const randomnessLabel = this.uiContainer.querySelector('#lbl-randomness') as HTMLLabelElement;
+        randomnessSlider.addEventListener('input', (e) => {
+            this.randomness = parseInt((e.target as HTMLInputElement).value);
+            randomnessLabel.innerText = `RANDOMNESS (${this.randomness}):`;
+        });
+        randomnessSlider.addEventListener('change', () => this.processAndDraw());
 
         const processBtn = this.uiContainer.querySelector('#ps-process') as HTMLButtonElement;
         processBtn.addEventListener('click', () => {
@@ -202,7 +242,9 @@ export class PixelSortSketch implements Sketch {
         const data = imageData.data;
         const width = imageData.width;
         const height = imageData.height;
-        const threshold = (this.intensity / 100) * 255;
+        
+        const minT = (this.minThreshold / 100) * 255;
+        const maxT = (this.maxThreshold / 100) * 255;
 
         const getVal = (x: number, y: number) => {
             const idx = (y * width + x) * 4;
@@ -242,39 +284,55 @@ export class PixelSortSketch implements Sketch {
             }
         };
 
+        const isInRange = (val: number) => val >= minT && val <= maxT;
+
         if (this.direction === 'right' || this.direction === 'left') {
             for (let y = 0; y < height; y++) {
                 let x = 0;
                 while (x < width) {
-                    while (x < width && getVal(x, y) < threshold) {
+                    while (x < width && !isInRange(getVal(x, y))) {
                         x++;
                     }
                     const start = x;
-                    while (x < width && getVal(x, y) >= threshold) {
+                    while (x < width && isInRange(getVal(x, y))) {
                         x++;
                     }
                     const end = x;
 
                     if (start < end) {
-                        const segment: number[][] = [];
-                        for (let i = start; i < end; i++) {
-                            const idx = (y * width + i) * 4;
-                            segment.push([data[idx], data[idx + 1], data[idx + 2], data[idx + 3]]);
-                        }
+                        let current = start;
+                        while (current < end) {
+                            let segSize = Math.floor(width / this.segments);
+                            if (this.randomness > 0) {
+                                const maxVariation = segSize * (this.randomness / 100);
+                                segSize += Math.floor((Math.random() - 0.5) * 2 * maxVariation);
+                            }
+                            segSize = Math.max(1, segSize);
+                            
+                            let segEnd = Math.min(current + segSize, end);
+                            
+                            const segment: number[][] = [];
+                            for (let i = current; i < segEnd; i++) {
+                                const idx = (y * width + i) * 4;
+                                segment.push([data[idx], data[idx + 1], data[idx + 2], data[idx + 3]]);
+                            }
 
-                        sortSegment(segment);
+                            sortSegment(segment);
 
-                        if (this.direction === 'left') {
-                            segment.reverse();
-                        }
+                            if (this.direction === 'left') {
+                                segment.reverse();
+                            }
 
-                        for (let i = start; i < end; i++) {
-                            const idx = (y * width + i) * 4;
-                            const pix = segment[i - start];
-                            data[idx] = pix[0];
-                            data[idx + 1] = pix[1];
-                            data[idx + 2] = pix[2];
-                            data[idx + 3] = pix[3];
+                            for (let i = current; i < segEnd; i++) {
+                                const idx = (y * width + i) * 4;
+                                const pix = segment[i - current];
+                                data[idx] = pix[0];
+                                data[idx + 1] = pix[1];
+                                data[idx + 2] = pix[2];
+                                data[idx + 3] = pix[3];
+                            }
+                            
+                            current = segEnd;
                         }
                     }
                 }
@@ -284,35 +342,48 @@ export class PixelSortSketch implements Sketch {
             for (let x = 0; x < width; x++) {
                 let y = 0;
                 while (y < height) {
-                    while (y < height && getVal(x, y) < threshold) {
+                    while (y < height && !isInRange(getVal(x, y))) {
                         y++;
                     }
                     const start = y;
-                    while (y < height && getVal(x, y) >= threshold) {
+                    while (y < height && isInRange(getVal(x, y))) {
                         y++;
                     }
                     const end = y;
 
                     if (start < end) {
-                        const segment: number[][] = [];
-                        for (let i = start; i < end; i++) {
-                            const idx = (i * width + x) * 4;
-                            segment.push([data[idx], data[idx + 1], data[idx + 2], data[idx + 3]]);
-                        }
+                        let current = start;
+                        while (current < end) {
+                            let segSize = Math.floor(height / this.segments);
+                            if (this.randomness > 0) {
+                                const maxVariation = segSize * (this.randomness / 100);
+                                segSize += Math.floor((Math.random() - 0.5) * 2 * maxVariation);
+                            }
+                            segSize = Math.max(1, segSize);
+                            
+                            let segEnd = Math.min(current + segSize, end);
+                            
+                            const segment: number[][] = [];
+                            for (let i = current; i < segEnd; i++) {
+                                const idx = (i * width + x) * 4;
+                                segment.push([data[idx], data[idx + 1], data[idx + 2], data[idx + 3]]);
+                            }
 
-                        sortSegment(segment);
+                            sortSegment(segment);
 
-                        if (this.direction === 'up') {
-                            segment.reverse();
-                        }
+                            if (this.direction === 'up') {
+                                segment.reverse();
+                            }
 
-                        for (let i = start; i < end; i++) {
-                            const idx = (i * width + x) * 4;
-                            const pix = segment[i - start];
-                            data[idx] = pix[0];
-                            data[idx + 1] = pix[1];
-                            data[idx + 2] = pix[2];
-                            data[idx + 3] = pix[3];
+                            for (let i = current; i < segEnd; i++) {
+                                const idx = (i * width + x) * 4;
+                                const pix = segment[i - current];
+                                data[idx] = pix[0];
+                                data[idx + 1] = pix[1];
+                                data[idx + 2] = pix[2];
+                                data[idx + 3] = pix[3];
+                            }
+                            current = segEnd;
                         }
                     }
                 }
